@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <limits>
 #include <string>
 
@@ -45,7 +44,11 @@ int main() {
         cout << "Ошибка: Количество столбцов должно быть положительным.\n";
     }
 
-    vector matrix(N, vector<int>(M));
+    int** matrix = new int*[N];
+    for (int i = 0; i < N; ++i) {
+        matrix[i] = new int[M];
+    }
+
 
     cout << "\nВведите " << N * M << " элементов матрицы (построчно):\n";
     for (int i = 0; i < N; ++i) {
@@ -59,9 +62,24 @@ int main() {
     if (N == 1)
     {
         cout << "Особых элементов не может существовать так как N = 1\n";
+
+        for (int i = 0; i < N; ++i) {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+
         return 0;
     }
+
     int specialCount = 0;
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < M; ++j)
+        {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
 
     for (int j = 0; j < M; ++j) {
         long long columnSum = 0;
@@ -73,7 +91,7 @@ int main() {
             long long sumOfOthers = columnSum - matrix[i][j];
 
             if (matrix[i][j] > sumOfOthers) {
-                cout << "  -> Найден 'особый' элемент в " << i << "-ой строке " << j << "-ом столбце"
+                cout << "  -> Найден 'особый' элемент в " << i+1 << "-ой строке " << j+1 << "-ом столбце: "
                      << matrix[i][j] << " (т.к. " << matrix[i][j] << " > " << sumOfOthers << ")\n";
                 specialCount++;
             }
@@ -82,6 +100,11 @@ int main() {
 
     cout << "________________________________________________________________________\n";
     cout << "Общее количество особых элементов: " << specialCount << endl;
+
+    for (int i = 0; i < N; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
 
     return 0;
 }
